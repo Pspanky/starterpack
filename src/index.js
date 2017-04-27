@@ -1,45 +1,50 @@
-import debounce from 'lodash.debounce';
-import React, { Component } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Route, NavLink, Switch } from 'react-router-dom';
 import ReactDOM from 'react-dom';
-import SearchBar from './components/search_bar';
-import youtubeSearch from './youtube-api';
-import VideoList from './components/video_list';
-import VideoDetail from './components/video_detail';
 import './style.scss';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+const About = (props) => {
+  return <div> All there is to know about me </div>;
+};
+const Welcome = (props) => {
+  return <div>Welcome</div>;
+};
 
-    this.search = debounce(this.search, 300);
-    this.search('pixar');
+const Test = (props) => {
+  return <div> ID: {props.match.params.id} </div>;
+};
 
-    this.state = {
-      videos: [],
-      selectedVideo: null,
-    };
-  }
+const FallBack = (props) => {
+  return <div>URL Not Found</div>;
+};
 
-  search(text) {
-    youtubeSearch(text).then((videos) => {
-      this.setState({
-        videos,
-        selectedVideo: videos[0],
-      });
-    });
-  }
-
-  render() {
-    return (
+const App = (props) => {
+  return (
+    <Router>
       <div>
-        <SearchBar onSearchChange={text => this.search(text)} />
-        <div id="video-section">
-          <VideoDetail video={this.state.selectedVideo} />
-          <VideoList onVideoSelect={selectedVideo => this.setState({ selectedVideo })} videos={this.state.videos} />
-        </div>
+        <Nav />
+        <Switch>
+          <Route exact path="/" component={Welcome} />
+          <Route path="/about" component={About} />
+          <Route exact path="/test/:id" component={Test} />
+          <Route component={FallBack} />
+        </Switch>
       </div>
-    );
-  }
-}
+    </Router>
+  );
+};
+
+const Nav = (props) => {
+  return (
+    <nav>
+      <ul>
+        <li><NavLink to="/" exact>Home</NavLink></li>
+        <li><NavLink to="/about">About</NavLink></li>
+        <li><NavLink to="/test/id1">test id1</NavLink></li>
+        <li><NavLink to="/test/id2">test id2</NavLink></li>
+      </ul>
+    </nav>
+  );
+};
 
 ReactDOM.render(<App />, document.getElementById('main'));
