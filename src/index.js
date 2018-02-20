@@ -3,9 +3,6 @@ import { BrowserRouter as Router, Route, NavLink, Switch } from 'react-router-do
 import ReactDOM from 'react-dom';
 import './style.scss';
 
-const About = (props) => {
-  return <div> All there is to know about me </div>;
-};
 const Welcome = (props) => {
   return <div>Welcome</div>;
 };
@@ -25,7 +22,6 @@ const App = (props) => {
         <Nav />
         <Switch>
           <Route exact path="/" component={Welcome} />
-          <Route path="/about" component={About} />
           <Route exact path="/test/:id" component={Test} />
           <Route component={FallBack} />
         </Switch>
